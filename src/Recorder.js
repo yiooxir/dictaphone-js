@@ -61,18 +61,15 @@ export default class Recorder {
   }
 
   clear() {
-    console.log('clear')
     this.worker.postMessage({ command: 'clear' });
   }
 
   getBuffer(cb) {
-    console.log('get buffer')
     this.callback = cb || this.config.callback;
     this.worker.postMessage({ command: 'getBuffer' })
   }
 
   exportWAV(cb, _type) {
-    console.log('exportWAV')
     this.callback = cb || this.config.callback;
     // todo add mime type to constructor
     const type = _type || this.config.type || 'audio/wav';
