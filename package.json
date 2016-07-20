@@ -4,9 +4,9 @@
   "description": "Js voice recorder library using native browser media API interface",
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src -d lib",
+    "build": "npm run clean && babel src -d lib",
     "start": "DEBUG=true node server.js",
-    "clean": "rimraf dist",
+    "clean": "rimraf lib",
     "lint": "eslint src/js; true"
   },
   "repository": {
