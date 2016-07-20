@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>HTML5 Dictation</title>
+
+    <!-- scripts -->
+    <!--<script src="src/recorder.js"></script>
+    <script src="src/dictaphone.js"></script>
+    <script src="demo/app.js"></script>-->
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/bundle.js"></script>
+    <!-- stylesheets -->
+    <!--<link rel="stylesheet" type="text/css" href="css/index.css">-->
+</head>
+<body>
+
+<!-- Dictaphone Widget -->
+<div id='dictaphone'>
+    <div id='playback_buttons'>
+        <button id='rec'>Record</button>
+        <button id='stop'>Stop</button>
+        <button id='play_pause'>Play/Pause</button>
+        <button id='rew'>Rewind</button>
+        <button id='ff'>Fastforward</button>
+        <button id='save'>Save</button>
+    </div>
+    <div id="recording_progress_bar">
+        <progress value="0" min="0" max="0" id="progress_bar"></progress>
+        <div id="progress_time"><b id="time">0:00 / 0:00</b></div>
+    </div>
+    <audio id='player'></audio>
+</div>
+
+<!-- Logging -->
+<h2>Log</h2>
+<pre id="log"></pre>
+
+<script type='text/javascript'>
+//    var d = new Dictaphone();
+//    var b = new Dictaphone();
+</script>
+</body>
+</html>

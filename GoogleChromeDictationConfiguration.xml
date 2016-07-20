@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ApplicationControlConfiguration Version="7.0" DragonMuteMode="MuteWindowsMic">
+  <ApplicationProfileList>
+    <ApplicationProfile TargetApplication="chrome" Active="True" Comment="">
+      <OperationList>
+        <Operation Event="spmRecordPressed" ModifierKey="None" Name="Record Start">
+          <Steps>
+            <OperationElement Type="Hotkey">
+              <Hotkey Key="Divide" Modifiers="Shift" />
+            </OperationElement>
+          </Steps>
+        </Operation>
+        <Operation Event="spmRecordReleased" ModifierKey="None" Name="Record End">
+          <Steps>
+            <OperationElement Type="Hotkey">
+              <Hotkey Key="Multiply" Modifiers="Shift" />
+            </OperationElement>
+          </Steps>
+        </Operation>
+        <Operation Event="spmFastRewindPressed" ModifierKey="None" Name="Rewind">
+          <Steps>
+            <OperationElement Type="Hotkey">
+              <Hotkey Key="Subtract" Modifiers="Shift" />
+            </OperationElement>
+          </Steps>
+        </Operation>
+        <Operation Event="spmFastForwardPressed" ModifierKey="None" Name="Forward">
+          <Steps>
+            <OperationElement Type="Hotkey">
+              <Hotkey Key="Add" Modifiers="Shift" />
+            </OperationElement>
+          </Steps>
+        </Operation>
+        <Operation Event="spmPlayStopTogglePressed" ModifierKey="None" Name="Play/Stop">
+          <Steps>
+            <OperationElement Type="Hotkey">
+              <Hotkey Key="Space" Modifiers="Shift" />
+            </OperationElement>
+          </Steps>
+        </Operation>
+        <Operation Event="spmFastRewindReleased" ModifierKey="None" Name="Stop Rewind">
+          <Steps>
+            <OperationElement Type="Hotkey">
+              <Hotkey Key="Oem6" Modifiers="Control" />
+            </OperationElement>
+          </Steps>
+        </Operation>
+        <Operation Event="spmFastForwardReleased" ModifierKey="None" Name="Stop FF">
+          <Steps>
+            <OperationElement Type="Hotkey">
+              <Hotkey Key="Space" Modifiers="Control" />
+            </OperationElement>
+          </Steps>
+        </Operation>
+      </OperationList>
+    </ApplicationProfile>
+  </ApplicationProfileList>
+</ApplicationControlConfiguration>
