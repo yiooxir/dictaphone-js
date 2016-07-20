@@ -55,15 +55,18 @@ export default class Dictaphone {
   }
 
   stopRecording() {
+    const that = this;
+
     if (!this.recording) {
       return;
     }
 
     this.recorder && this.recorder.stop();
     this.recording = false;
-    this._createMasterRecording();
+    this._createMasterRecording(() => {
+      setTimeout(() => {this.emit(events.STOP_REC, {duration: that.player.duration})}, 200);
+    });
     this.recorder.clear();
-    this.emit(events.STOP_REC, {duration: this.player.duration})
   }
 
   togglePlayback () {
@@ -128,19 +131,20 @@ export default class Dictaphone {
     this.rewind(this.player.duration);
   }
 
-  _createMasterRecording() {
+  _createMasterRecording(callback) {
     const that = this;
     this.recorder && this.recorder.exportWAV((blob) => {
       if(that.master_recording){
-        that._concatenateRecordings(that.master_recording, blob)
+        that._concatenateRecordings(that.master_recording, blob, (blob) => callback(blob));
       } else {
         that.master_recording = blob;
-        that.player.src = URL.createObjectURL(that.master_recording)
+        that.player.src = URL.createObjectURL(that.master_recording);
+        callback(blob);
       }
     });
   }
 
-  _concatenateRecordings(blob1, blob2) {
+  _concatenateRecordings(blob1, blob2, callback) {
     const duration = this.player.duration;
     const position = this.player.currentTime;
     const blob1Size = blob1.size-44;
@@ -171,7 +175,8 @@ export default class Dictaphone {
       view.setUint32(4, 36+concatenated_blob.size, true)
       view.setUint32(40, concatenated_blob.size, true)
       this.master_recording = new Blob([view, concatenated_blob], {type: 'audio/wav'})
-      this.player.src = URL.createObjectURL(this.master_recording)
+      this.player.src = URL.createObjectURL(this.master_recording);
+      callback(this.master_recording);
     }
   }
 
