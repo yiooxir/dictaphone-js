@@ -12,7 +12,8 @@ export const events = {
   STOP_REC: 'stopRecording',
   PROGRESS: 'progress',
   PAUSE: 'pause',
-  REWIND: 'rewind'
+  REWIND: 'rewind',
+  ERROR: 'error'
 };
 
 export default class Dictaphone {
@@ -90,28 +91,29 @@ export default class Dictaphone {
         _time = _time + this.progressBarStep;
       } else {
         clearInterval(loop);
+        this.playing = false;
       }
     }, this.progressBarStep * 1000);
   }
 
   pause() {
+    if (this.recording) {
+      this.emit(events.ERROR, 'Protect to call pause while recording');
+    }
     this.playing = false;
     this.player.pause();
     this.emit(events.PAUSE, {time: this.player.currentTime})
   }
 
   rewind(time) {
-    let isPlaying = false;
     let _time = time;
 
     if (this.recording || time < 0) {
+      this.emit(events.ERROR, 'Protect to call rewind while recording');
       return;
     }
 
-    if (this.playing) {
-      this.pause()
-      isPlaying = true;
-    }
+    this.playing && this.pause();
 
     if (time > this.player.duration) {
       _time = this.player.duration;
@@ -120,7 +122,6 @@ export default class Dictaphone {
     this.player.currentTime = _time;
 
     this.emit(events.REWIND, {toTime: _time});
-    isPlaying && this.play();
   }
 
   rewindToBegin() {

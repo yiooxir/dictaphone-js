@@ -51,12 +51,10 @@ export default class Recorder {
   }
 
   record() {
-    console.log('record')
     this.recording = true;
   }
 
   stop() {
-    console.log('stop')
     this.recording = false;
   }
 
@@ -79,6 +77,4 @@ export default class Recorder {
       type: type
     });
   }
-
-
 }
