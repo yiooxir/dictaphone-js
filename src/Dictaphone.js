@@ -92,6 +92,7 @@ export default class Dictaphone {
       } else {
         clearInterval(loop);
         this.playing = false;
+        this.emit(events.PAUSE, {time: this.player.currentTime})
       }
     }, this.progressBarStep * 1000);
   }
