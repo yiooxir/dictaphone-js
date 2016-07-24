@@ -5,10 +5,9 @@ console.log(path.join(__dirname, '..', 'lib'));
 module.exports = {
   debug: true,
   devtool: 'source-map',
-  // devtool: 'cheap-module-eval-source-map',
   entry: [
     'webpack-hot-middleware/client',
-    './app.js'
+    './demo.js'
   ],
   output: {
     path: path.join(__dirname, 'dist'),

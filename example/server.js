@@ -7,15 +7,15 @@ var app = new (require('express'))()
 var port = 3000
 
 var compiler = webpack(config)
-app.get('/recorderWorker.js', function(req, res) {
-  res.sendFile(__dirname + '/recorderWorker.js');
-})
+// app.get('/recorderWorker.js', function(req, res) {
+//   res.sendFile(__dirname + '/recorderWorker.js');
+// })
 
 app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }))
 app.use(webpackHotMiddleware(compiler))
 
 app.get("/", function(req, res) {
-  res.sendFile(__dirname + '/index.html')
+  res.sendFile(__dirname + '/demo.html')
 })
 
 app.listen(port, function(error) {

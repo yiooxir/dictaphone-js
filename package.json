@@ -22,7 +22,7 @@
     "media"
   ],
   "author": "Serj Borovikov <spectrs55@gmail.com> (http://github.com/yiooxir)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/yiooxir/dictaphone-js/issues"
   },

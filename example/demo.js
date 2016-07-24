@@ -1,6 +1,6 @@
 import Dictaphone, { events, formatTime } from 'record-audio-js';
 
-import './css/style.css';
+import './demo.css';
 
 function __log(e, data) {
   const _e = typeof e === 'object' ? JSON.stringify(e) : e;
