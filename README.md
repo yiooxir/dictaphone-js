@@ -42,8 +42,8 @@ const dictaphone = new Dictaphone(player);
   rec.addEventListener("click", function(){dictaphone.startRecording()});
   stop.addEventListener("click", function(){dictaphone.stopRecording()});
   pp.addEventListener("click", function(){dictaphone.togglePlayback()});
-  rew.addEventListener("click", function(){dictaphone.rewind(3)});
-  ff.addEventListener("click", function(){dictaphone.rewind(0)});
+  rew.addEventListener("click", function(){dictaphone.rewind(0)});
+  ff.addEventListener("click", function(){dictaphone.rewindToEnd()});
 
 ```
 
