@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Simple js native voice recorder",
   "scripts": {
-    "start": "node server.js",
+    "start": "babel app.js -o demo.js && node server.js",
     "test": "",
     "test:watch": ""
   },
@@ -21,6 +21,7 @@
     "style-loader": "^0.13.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.11.4",
     "babel-core": "^6.3.15",
     "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.0",
