@@ -5,6 +5,7 @@ const defaultConfig = {
   workerPath: 'recordWorker',
 };
 
+const audio_context = new AudioContext();
 export const events = {
   PLAY: 'play',
   PAUSE: 'pause',
@@ -199,8 +200,6 @@ export default class Dictaphone {
   }
 
   startUserMedia(stream) {
-    const audio_context = new AudioContext();
-
     const input = audio_context.createMediaStreamSource(stream)
     this.recorder = new Recorder(input, this.config);
   }
