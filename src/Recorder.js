@@ -3,12 +3,19 @@ import InlineWorker from 'inline-worker';
 
 export default class Recorder {
   constructor(source, cfg) {
-    this.config = cfg || {};
-    this.bufferLen = this.config.bufferLen || 4096;
+    this.config = Object.assign({}, {
+      rate: source.context.sampleRate,
+      sampleRate: source.context.sampleRate,
+      numChannels: 2,
+      bufferLen: 4096,
+      type: 'audio/wav',
+    }, cfg);
+    this.bufferLen = this.config.bufferLen;
     this.context = source.context;
-    this.node = (this.context.createScriptProcessor ||
-    this.context.createJavaScriptNode).call(this.context, this.bufferLen, 2, 2);
-    // this.worker = new Worker();
+    this.node = (
+      this.context.createScriptProcessor ||
+      this.context.createJavaScriptNode
+    ).call(this.context, this.bufferLen, 2, 2);
     this.worker = new InlineWorker(recorderWorker);
     this.recording = false;
     this.callback = () => {};
@@ -16,7 +23,8 @@ export default class Recorder {
     this.worker.postMessage({
       command: 'init',
       config: {
-        sampleRate: this.context.sampleRate
+        sampleRate: this.config.sampleRate,
+        numChannels: this.config.numChannels
       }
     });
 
@@ -67,14 +75,16 @@ export default class Recorder {
     this.worker.postMessage({ command: 'getBuffer' })
   }
 
-  exportWAV(cb, _type) {
+  exportWAV(cb, _type, _rate) {
     this.callback = cb || this.config.callback;
     // todo add mime type to constructor
-    const type = _type || this.config.type || 'audio/wav';
+    const type = _type || this.config.type;
+    const rate = _rate || this.config.rate;
     if (!this.callback) throw new Error('Callback not set');
     this.worker.postMessage({
       command: 'exportWAV',
-      type: type
+      type: type,
+      rate: rate
     });
   }
 }

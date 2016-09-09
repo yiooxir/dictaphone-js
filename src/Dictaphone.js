@@ -2,7 +2,7 @@ import Recorder from './Recorder';
 
 const defaultConfig = {
   worker: null,
-  workerPath: 'recordWorker',
+  workerPath: 'recordWorker'
 };
 
 const audio_context = new AudioContext();

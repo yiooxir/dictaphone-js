@@ -18,7 +18,10 @@ function createDict() {
     pb = document.getElementById("progress_bar"),
     save = document.getElementById("save");
 
-  const dictaphone = new Dictaphone(player);
+  const dictaphone = new Dictaphone(player, {
+    numChannels: 1, // Mono
+    rate: 16000 // 16kHz
+  });
   rec.addEventListener("click", function(){dictaphone.startRecording()})
   stop.addEventListener("click", function(){dictaphone.stopRecording()})
   pp.addEventListener("click", function(){dictaphone.togglePlayback()})
