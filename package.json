@@ -1,6 +1,6 @@
 {
   "name": "dictaphone-js",
-  "version": "0.1.10",
+  "version": "0.2.0",
   "description": "Js voice recorder library using native browser media API interface",
   "main": "lib/index.js",
   "scripts": {
