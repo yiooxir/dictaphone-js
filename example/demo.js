@@ -59,7 +59,11 @@ function createDict() {
     });
   });
 
-  // save.addEventListener("click", function(){exportWAV()})
+  save.addEventListener("click", function () {
+    exportWAV();
+  });
+
+  window.dictaphone = dictaphone;
 }
 
 (function (window) {
