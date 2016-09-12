@@ -26,7 +26,10 @@ function createDict() {
       pb = document.getElementById("progress_bar"),
       save = document.getElementById("save");
 
-  var dictaphone = new _recordAudioJs2.default(player);
+  var dictaphone = new _recordAudioJs2.default(player, {
+    numChannels: 1, // Mono
+    rate: 16000 // 16kHz
+  });
   rec.addEventListener("click", function () {
     dictaphone.startRecording();
   });
@@ -59,11 +62,7 @@ function createDict() {
     });
   });
 
-  save.addEventListener("click", function () {
-    exportWAV();
-  });
-
-  window.dictaphone = dictaphone;
+  // save.addEventListener("click", function(){exportWAV()})
 }
 
 (function (window) {

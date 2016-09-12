@@ -9,10 +9,10 @@ const audio_context = new AudioContext();
 export const events = {
   PLAY: 'play',
   PAUSE: 'pause',
+  ENDED: 'ended',
   START_REC: 'startRecording',
   STOP_REC: 'stopRecording',
   PROGRESS: 'progress',
-  PAUSE: 'pause',
   REWIND: 'rewind',
   ERROR: 'error'
 };
@@ -21,16 +21,17 @@ export default class Dictaphone {
   constructor(player, config) {
     this.config = Object.assign({}, defaultConfig, config);
     this.player = player;
-    this.recorder = this.getRecorder();
+    this.recorder = null;
     this.playing = false;
     this.recording = false;
     this.master_recording = null;
     this.progressBarStep = 0.1; // in sec;
     this.subscribers = {};
-  }
 
+  }
+  
   destroy() {
-    this.subscribers = [];
+    this.subscribers = {};
     // todo remove media URL
   }
 
@@ -51,9 +52,11 @@ export default class Dictaphone {
       return;
     }
 
-    this.recorder && this.recorder.record();
-    this.recording = true;
-    this.emit(events.START_REC, {position: this.player.currentTime});
+    this.setRecorder(() => {
+      this.recorder && this.recorder.record();
+      this.recording = true;
+      this.emit(events.START_REC, {position: this.player.currentTime});
+    });
   }
 
   stopRecording() {
@@ -66,7 +69,10 @@ export default class Dictaphone {
     this.recorder && this.recorder.stop();
     this.recording = false;
     this._createMasterRecording(() => {
-      setTimeout(() => {this.emit(events.STOP_REC, {duration: that.player.duration})}, 200);
+      setTimeout(() => {
+        this.emit(events.STOP_REC, {duration: that.player.duration});
+        this.closeRecorder();
+      }, 200);
     });
     this.recorder.clear();
   }
@@ -183,7 +189,7 @@ export default class Dictaphone {
     }
   }
 
-  getRecorder() {
+  setRecorder(cb) {
     try{
       window.AudioContext = window.AudioContext || window.webkitAudioContext;
       navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
@@ -193,14 +199,24 @@ export default class Dictaphone {
       this.emit('error', 'No web audio support in this browser!')
     }
 
-    navigator.getUserMedia({audio: true}, stream => this.startUserMedia(stream), (e) => {
+    const startUserMedia = (stream) => {
+      const input = audio_context.createMediaStreamSource(stream);
+      this.recorder = new Recorder(input, this.config);
+      this.stream = stream;
+      cb();
+      window.s = stream;
+    };
+
+    navigator.getUserMedia({audio: true}, stream => startUserMedia(stream), (e) => {
       console.warn('No live audio input: ' + e);
       this.emit('error', 'No live audio input: ' + e);
     });
   }
 
-  startUserMedia(stream) {
-    const input = audio_context.createMediaStreamSource(stream)
-    this.recorder = new Recorder(input, this.config);
+
+
+  closeRecorder() {
+    this.stream.getTracks()[0].stop();
+    console.log(this.stream.getTracks())
   }
 }

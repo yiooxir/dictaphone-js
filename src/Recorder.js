@@ -1,5 +1,6 @@
 import recorderWorker from './recorderWorker';
 import InlineWorker from 'inline-worker';
+const worker = new InlineWorker(recorderWorker);
 
 export default class Recorder {
   constructor(source, cfg) {
@@ -16,11 +17,11 @@ export default class Recorder {
       this.context.createScriptProcessor ||
       this.context.createJavaScriptNode
     ).call(this.context, this.bufferLen, 2, 2);
-    this.worker = new InlineWorker(recorderWorker);
+    // worker = new InlineWorker(recorderWorker);
     this.recording = false;
     this.callback = () => {};
 
-    this.worker.postMessage({
+    worker.postMessage({
       command: 'init',
       config: {
         sampleRate: this.config.sampleRate,
@@ -34,14 +35,14 @@ export default class Recorder {
   init(source) {
     const that = this;
 
-    this.worker.onmessage = e => {
+    worker.onmessage = e => {
       const blob = e.data;
       that.callback(blob);
     }
 
     this.node.onaudioprocess = e => {
       if (!that.recording) return;
-      this.worker.postMessage({
+      worker.postMessage({
         command: 'record',
         buffer: [
           e.inputBuffer.getChannelData(0),
@@ -67,12 +68,12 @@ export default class Recorder {
   }
 
   clear() {
-    this.worker.postMessage({ command: 'clear' });
+    worker.postMessage({ command: 'clear' });
   }
 
   getBuffer(cb) {
     this.callback = cb || this.config.callback;
-    this.worker.postMessage({ command: 'getBuffer' })
+    worker.postMessage({ command: 'getBuffer' })
   }
 
   exportWAV(cb, _type, _rate) {
@@ -81,7 +82,7 @@ export default class Recorder {
     const type = _type || this.config.type;
     const rate = _rate || this.config.rate;
     if (!this.callback) throw new Error('Callback not set');
-    this.worker.postMessage({
+    worker.postMessage({
       command: 'exportWAV',
       type: type,
       rate: rate
