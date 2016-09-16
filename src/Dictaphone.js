@@ -5,7 +5,16 @@ const defaultConfig = {
   workerPath: 'recordWorker'
 };
 
-const audio_context = new AudioContext();
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+window.URL = window.URL || window.webkitURL;
+
+export function isSupported() {
+  return !!window.AudioContext && !!navigator.getUserMedia && !!window.URL;
+}
+
+const audio_context = isSupported() ? new AudioContext() : null;
+
 export const events = {
   PLAY: 'play',
   PAUSE: 'pause',
@@ -27,11 +36,6 @@ export default class Dictaphone {
     this.master_recording = null;
     this.progressBarStep = 0.1; // in sec;
     this.subscribers = {};
-    this.supported = true;
-  }
-
-  isSupported() {
-    return this.supported;
   }
 
   destroy() {
@@ -52,6 +56,11 @@ export default class Dictaphone {
   }
 
   startRecording () {
+    if (!isSupported()) {
+      console.warn('MediaContext is not supported !!!');
+      return;
+    }
+
     if (this.recording || this.playing) {
       return;
     }
@@ -194,19 +203,6 @@ export default class Dictaphone {
   }
 
   setRecorder(cb) {
-    try{
-      window.AudioContext = window.AudioContext || window.webkitAudioContext;
-      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
-      window.URL = window.URL || window.webkitURL;
-    } catch(e){
-      console.warn('No web audio support in this browser!');
-      this.emit('error', 'No web audio support in this browser!')
-    }
-
-    if (!window.AudioContext || !navigator.getUserMedia || !window.URL) {
-      return this.supported = false;
-    }
-
     const startUserMedia = (stream) => {
       const input = audio_context.createMediaStreamSource(stream);
       this.recorder = new Recorder(input, this.config);
