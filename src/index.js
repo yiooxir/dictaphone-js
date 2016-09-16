@@ -1,2 +1,2 @@
-export default, { events } from './Dictaphone';
+export default, { events, isSupported } from './Dictaphone';
 export * from './utils';
