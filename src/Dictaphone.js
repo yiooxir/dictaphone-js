@@ -27,9 +27,13 @@ export default class Dictaphone {
     this.master_recording = null;
     this.progressBarStep = 0.1; // in sec;
     this.subscribers = {};
-
+    this.supported = true;
   }
-  
+
+  isSupported() {
+    return this.supported;
+  }
+
   destroy() {
     this.subscribers = {};
     // todo remove media URL
@@ -197,6 +201,10 @@ export default class Dictaphone {
     } catch(e){
       console.warn('No web audio support in this browser!');
       this.emit('error', 'No web audio support in this browser!')
+    }
+
+    if (!window.AudioContext || !navigator.getUserMedia || !window.URL) {
+      return this.supported = false;
     }
 
     const startUserMedia = (stream) => {
